@@ -43,6 +43,15 @@ void MST::makeTree() {
           if (adjacentMatrix[u][v] && mstSet[v] == false && adjacentMatrix[u][v] <  key[v])
              parent[v]  = u, key[v] = adjacentMatrix[u][v];
      }
+
+	int cost = 0; 
+
+	// MST Cost
+	for (int i = 0; i < N; i++){
+	  cost+=adjacentMatrix[i][parent[i]]; 
+	} 
+
+	std::cout << "MST Cost " << cost << endl; 
 }
 
 // A utility function to find the vertex with minimum key value, from
@@ -102,7 +111,6 @@ float MST::calStd(int option) {
 void MST::makeTSP2() {
 	//make a Eulerian tour by DFS
 	std::stack<int> s; 
-        int top; 
 
 	for (int i = 0; i < N; i++){
 	  mstSet[i] = false; 
@@ -112,11 +120,24 @@ void MST::makeTSP2() {
 	  if (mstSet[v] == false)
             s = explore(v, s); 
 	}
-	//add shortcuts if a vertex has no detours.
 	
+	parent[0] = s.top(); 
+	
+	while (s.empty() == false)
+	{
+	  s.pop(); 
+	}
+
  	printMST(); 
 
+	int cost = 0; 
+
 	//calculate heuristic TSP cost
+	for (int l = 0; l < N; l++){
+          cost+=adjacentMatrix[l][parent[l]]; 
+        }
+
+	std::cout << "TSP2 Cost " << cost << endl;  
 }
 
 stack<int> MST::explore(int v, stack<int> s){
@@ -141,7 +162,6 @@ stack<int> MST::explore(int v, stack<int> s){
   // If dead end vertex reached
   if (end == true)
   {
-std::cout << "DEAD END" << v << endl; 
     s.push(v); 
   }
 

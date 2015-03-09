@@ -61,14 +61,22 @@ int main() {
 	int W, H, N;
 	Point pointset;
 
-	//W = 5000;
-	//H = 3000;
-	//N = 7000;
+	W = 5000; 
+	H = 3000; 
+	N = 7000; 
 
-	W = 10; 
-	H = 10; 
-	N = 5; 
-	
+/*
+	W = 11390;
+	H = 11232;
+	N = 8586;
+*/
+
+/*
+	W = 100; 
+	H = 100; 
+	N = 10; 
+*/
+
 	cout<<"W: "<<W<<" H: "<<H<<" N:"<<N<<endl;
 
 	pointset.generatePoint(W, H, N); //max(W,H,N) should be < 20000 because of memory limitation
@@ -81,7 +89,6 @@ int main() {
 	MST mst(adjacentMatrix, N);
 	mst.makeTree();
 	mst.printMST();
-	
 
 	//Deliverable B: Find TSP2 path from the constructed MST
 	//You won't need any wrappers for B.
@@ -89,6 +96,7 @@ int main() {
 
 	//Deliverable C: Find TSP1.5 path from the constructed MST
 	
+
 	//Find the perfect minimum-weight matching 
 	struct PerfectMatching::Options options;
 	int i, e, node_num = N, edge_num = N*(N-1)/2;
