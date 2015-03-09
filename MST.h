@@ -19,6 +19,7 @@ public:
 
 	//deliverable b
 	void makeTSP2();
+	stack<int> explore(int v, stack<int>); 
 
 	//deliverable c
 	void makeTSP1_5();

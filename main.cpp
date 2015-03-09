@@ -61,10 +61,14 @@ int main() {
 	int W, H, N;
 	Point pointset;
 
-	W = 5000;
-	H = 3000;
-	N = 7000;
+	//W = 5000;
+	//H = 3000;
+	//N = 7000;
 
+	W = 10; 
+	H = 10; 
+	N = 5; 
+	
 	cout<<"W: "<<W<<" H: "<<H<<" N:"<<N<<endl;
 
 	pointset.generatePoint(W, H, N); //max(W,H,N) should be < 20000 because of memory limitation
@@ -76,12 +80,12 @@ int main() {
 	//Deliverable A: From pointset and adjacentMatrix, you should construct MST with Prim or Kruskal
 	MST mst(adjacentMatrix, N);
 	mst.makeTree();
-	//mst.printMST();
+	mst.printMST();
 	
 
 	//Deliverable B: Find TSP2 path from the constructed MST
 	//You won't need any wrappers for B.
-
+	mst.makeTSP2(); 
 
 	//Deliverable C: Find TSP1.5 path from the constructed MST
 	

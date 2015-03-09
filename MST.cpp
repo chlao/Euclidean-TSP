@@ -1,4 +1,5 @@
 #include "MST.h"
+#include <stack>
 
 MST::MST(float** input, int size) {
 	adjacentMatrix = input;
@@ -100,10 +101,51 @@ float MST::calStd(int option) {
 
 void MST::makeTSP2() {
 	//make a Eulerian tour by DFS
+	std::stack<int> s; 
+        int top; 
 
+	for (int i = 0; i < N; i++){
+	  mstSet[i] = false; 
+	}
+
+	for (int v = 0; v < N; v++){
+	  if (mstSet[v] == false)
+            s = explore(v, s); 
+	}
 	//add shortcuts if a vertex has no detours.
+	
+ 	printMST(); 
 
 	//calculate heuristic TSP cost
+}
+
+stack<int> MST::explore(int v, stack<int> s){
+  mstSet[v] = true;
+  bool end = true;  
+ 
+  for (int k = 1; k < N; k++){
+    // Explore adjacent vertices 
+    if (parent[k] == v){
+      end = false; 
+      // If the adjacent vertices has not been visited 
+      if (mstSet[k] == false){
+        if (s.empty() == false){
+          parent[k] = s.top(); 
+          s.pop(); 
+        }
+        s = explore(k,s);  
+      }
+    }
+  }
+
+  // If dead end vertex reached
+  if (end == true)
+  {
+std::cout << "DEAD END" << v << endl; 
+    s.push(v); 
+  }
+
+  return s; 
 }
 
 void MST::makeTSP1_5() {
