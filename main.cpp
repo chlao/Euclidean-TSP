@@ -61,9 +61,11 @@ int main() {
 	int W, H, N;
 	Point pointset;
 
+/*
 	W = 5000; 
 	H = 3000; 
 	N = 7000; 
+*/
 
 /*
 	W = 11390;
@@ -71,11 +73,11 @@ int main() {
 	N = 8586;
 */
 
-/*
+
 	W = 100; 
 	H = 100; 
 	N = 10; 
-*/
+
 
 	cout<<"W: "<<W<<" H: "<<H<<" N:"<<N<<endl;
 
@@ -92,11 +94,11 @@ int main() {
 
 	//Deliverable B: Find TSP2 path from the constructed MST
 	//You won't need any wrappers for B.
-	mst.makeTSP2(); 
+	//mst.makeTSP2(); 
 
 	//Deliverable C: Find TSP1.5 path from the constructed MST
-	
-
+	mst.makeTSP1_5(); 
+/*
 	//Find the perfect minimum-weight matching 
 	struct PerfectMatching::Options options;
 	int i, e, node_num = N, edge_num = N*(N-1)/2;
@@ -121,6 +123,6 @@ int main() {
 	delete pm;
 	delete [] edges;
 	delete [] weights;
-	
+*/	
 	return 0;
 }

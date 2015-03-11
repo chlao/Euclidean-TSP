@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Minmatching/PerfectMatching.h" 
 
 #pragma once
 
@@ -29,7 +30,15 @@ public:
 
 private:
 	void minimumMatching();
-	void combine();
+	void combine(std::vector<int> oddDegree, PerfectMatching* pm, int node_num);
 	int minKey(int key[], bool mstSet[]);
 
-};
+	void LoadInput(int& node_num, int& edge_num, int*& edges, int*& weights, vector<int> oddDegree, int N);
+
+	void PrintMatching(int node_num, PerfectMatching* pm, vector<int> oddDegree);
+
+	void printEulerUtil(int u, vector<vector<int>> adjList); 
+	bool isValidNextEdge(int u, int v, vector<vector<int>> adjList); 
+	int DFSCount(int v, bool visited[], vector<vector<int>> adjList); 
+
+ };
