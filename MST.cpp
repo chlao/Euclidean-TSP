@@ -186,44 +186,82 @@ void MST::makeTSP1_5() {
 }
 
 // Print Euler tour tour starting from vertex u 
-void MST::printEulerUtil(int u, vector<vector<int>> adjList)
+void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], s)
 {
-//cout << "printEulerUtil" << endl; 
+/*
+cout << "adjecency list of " << u << endl;
+for (int k = 0; k < adjList[u].size(); k++){
+ cout << "A: " << u << " - " << adjList[u][k] << endl; 
+}
+*/
 
-  std::vector<int>::iterator position;  
-
+//if (visited[u] == false){
   // Recurse for all the vertices adjacent to this vertex 
   for (int i = 0; i < adjList[u].size(); i++){
 
     int v = adjList[u][i]; // Adjacent vertex 
+    //cout << "printEueler Inner: " << u << " - " << v <<endl;
+/*
+cout << "Inner adjacency list" << endl; 
+for (int k = 0; k < adjList[u].size(); k++){
+cout << "inner: " << u << " - " << v << endl;  
+}
+*/
+
 
     // Check if u-v edge is valid next edge (i.e. doesn't burn a bridge)
-    if (v != -1 && isValidNextEdge(u,v, adjList)){
-      
-      cout << u << " - " << v << endl; 
-      
-      adjList[u][i] = -1; 
-      
-      for (int j = 0; j < adjList[u].size(); j++){
-        if (adjList[v][j] == u)
-          adjList[v][j] = -1; 
+    if (v != -1 && isValidNextEdge(u,v, adjList) && 
+	visited[v] == false /*&& isVisited(v) == false*/){
+
+      if (isVisited(v) == true){
+	
       }
-      //position = std::find(adjList[u].begin(), adjList[u].end(), v);
-      //adjList[u].erase(position);
 
-      // Erase from other vertex's adjacency list 
-      //position = std::find(adjList[v].begin(), adjList[v].end(), u); 
-      //adjList[v].erase(position); 
+      cout << u << " - " << v << endl;
+      
+      adjList[u][i] = -1; // Remove u-v edge 
 
-      printEulerUtil(v, adjList); 
-    }
-//std::cout << "printEulerUtil: " << i << endl; 
-  }
+      // Remove v-u edge 
+      for (int j = 0; j < adjList[v].size(); j++){
+        if (adjList[v][j] == u){
+          adjList[v][j] = -1; 
+          break; 
+        }
+      }
+/*
+cout << "adjecency list of " << u << endl;
+for (int k = 0; k < adjList[u].size(); k++){
+ cout << "A: " << u << " - " << adjList[u][k] << endl; 
 }
 
-bool MST::isValidNextEdge(int u, int v, std::vector<std::vector<int>> adjList)
+cout << "adjacency list of " << v << endl; 
+for (int k = 0; k < adjList[v].size(); k++){
+  cout << "A: " << v << " - " << adjList[v][k] << endl; 
+}
+*/
+//cout << "printEuler end: " << v << endl; 
+setVisited(v); 
+      
+      printEulerUtil(v, adjList, visited,s); 
+      visited[v] = true; 
+    }
+  }
+//}
+}
+
+void MST::setVisited(int v)
 {
-  // The edge u-v is valid in one of the following two cases" 
+  mstSet[v] = true; 
+}
+
+bool MST::isVisited(int v) 
+{
+  return mstSet[v]; 
+}
+
+bool MST::isValidNextEdge(int u, int v, vector<vector<int>> adjList)
+{
+  // The edge u-v is valid in one of the following two cases: 
 
   // 1) If v is the only adjacent vertex of u 
   int count = 0; // To store count of adjcent vertices 
@@ -239,37 +277,41 @@ bool MST::isValidNextEdge(int u, int v, std::vector<std::vector<int>> adjList)
   // If there are multiple adjacents, then u-v is not a bridge
   // Do following steps to check if u-v is a bridge 
 
-  // 2.a) count vertices reachble from u 
+  // 2.a) count vertices reachable from u 
   bool visited[N]; 
-  memset(visited, false, N); 
+  memset(visited, false, N); // This is being reset
+
   int count1 = DFSCount(u, visited, adjList);
 
-  vector<int>::iterator position;  
+//cout << "Count1: " << u << " - " << v << " ; " << count1 << endl; 
 
   // 2.b) Remove edge (u,v) and after removing edge, count 
-  // vertices reachable from u 
-  //position = find(adjList[u].begin(), adjList[u].end(), v); 
-  //adjList[u].erase(position); 
-  
-  for (int i = 0; i < adjList[u].size(); i++){
-    if (adjList[u][i] == v) 
+  // vertices reachable from u  
+  int i;  
+  int j; 
+
+  for (i = 0; i < adjList[u].size(); i++){
+    if (adjList[u][i] == v){
       adjList[u][i] = -1; 
+      break; 
+    }
   }
 
-  for (int j = 0; j < adjList[v].size(); j++){
-    if (adjList[v][j] == u)
+  for (j = 0; j < adjList[v].size(); j++){
+    if (adjList[v][j] == u){
       adjList[v][j] = -1; 
+      break; 
+    }
   }
-
-  //position = find(adjList[v].begin(), adjList[v].end(), u); 
-  //adjList[v].erase(position); 
 
   memset(visited, false, N); 
   int count2 = DFSCount(u, visited, adjList); 
 
+  //cout << "Count2: " << u << " - " << v << " ; " << count2 << endl; 
+
   // 2.c) Add the edge back to the graph 
-  adjList[u].push_back(v); 
-  adjList[v].push_back(u); 
+  adjList[u][i] = v; 
+  adjList[v][j] = u; 
   
   // 2.d) If count1 is greater, then edge (u,v) is a bridge 
   return (count1 > count2)? false: true; 
@@ -280,20 +322,22 @@ int MST::DFSCount(int v, bool visited[], vector<vector<int>> adjList)
 {
   visited[v] = true; 
   int count = 1; 
+/*std::cout << " " << v << "'s visited "; 
+for (int i = 0; i < N; i++){
+  std::cout << visited[i]; 
+}*/
 
   // Recurse for all vertices adjacent to this vertex 
-  for (int i = 0; i < adjList[v].size(); i++){
-    if (adjList[v][i] != -1 && visited[i] == false)
-      count+=DFSCount(i, visited, adjList); 
+  for (int i = 0; i < adjList[v].size(); ++i){
+    if (adjList[v][i] != -1 && visited[adjList[v][i]] == false)
+      count+=DFSCount(adjList[v][i], visited, adjList); 
   }
-
   return count; 
 }
 
 void MST::minimumMatching() { //if you choose O(n^2)
 	int degree; 
 	int numOdd = 0; 
-	//std::unordered_set<int> oddDegree;
 	std::vector<int> oddDegree; 	 
 
 	//find minimum-weight matching for the MST. 
@@ -310,9 +354,8 @@ void MST::minimumMatching() { //if you choose O(n^2)
 	  // If degree of vertex is odd, add to set of odd degree vertices
 	  if (degree & 1){
 	    oddDegree.push_back(i); 
-//std::cout << "ODD: " << i << endl;  
 	    numOdd++; 
-          }		
+          }	
 	}	
 
 	//you should carefully choose a matching algorithm to optimize the TSP cost.
@@ -393,12 +436,11 @@ void MST::combine(std::vector<int> oddDegree, PerfectMatching* pm, int node_num)
 	  }
 	}
 
-	printEulerUtil(0, adjList); 
-
-//std::cout << "Butt" << endl; 
+ 
+	std::cout << "Printing Eulerian circuit" << endl; 
 
 /*
-std::cout << "Adjaceny List size: " << adjList.size() << endl; 
+std::cout << "Adjacent List size: " << adjList.size() << endl; 
 
 	// Print out to see if it is accurate
 	for (int i = 0; i < N; i++){
@@ -408,4 +450,13 @@ std::cout << "Adjaceny List size: " << adjList.size() << endl;
 	  }
 	} 
 */
+	bool visited[N]; 
+ 	memset(visited, false, N);
+
+	memset(mstSet, false, N);  
+
+stack<int> s; 
+
+	printEulerUtil(0, adjList, visited, s); 
+
 }

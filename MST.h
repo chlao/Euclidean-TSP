@@ -37,8 +37,11 @@ private:
 
 	void PrintMatching(int node_num, PerfectMatching* pm, vector<int> oddDegree);
 
-	void printEulerUtil(int u, vector<vector<int>> adjList); 
+	void printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], stack<int> s); 
 	bool isValidNextEdge(int u, int v, vector<vector<int>> adjList); 
-	int DFSCount(int v, bool visited[], vector<vector<int>> adjList); 
+	int DFSCount(int v, bool visited[], vector<vector<int>> adjList);
+
+	void setVisited(int v); 
+	bool isVisited(int v);  
 
  };
