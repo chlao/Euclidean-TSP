@@ -10,6 +10,7 @@ public:
 	int* key; //Key values used to pick minimum weight edge in cut
 	bool* mstSet; //To represent set of vertices not yet included in MST
 	int N; //the size of pointset
+	vector<vector<int>> TSP15;  
 
 	MST(float** adjacentMatrix, int size);
 	~MST();
@@ -39,9 +40,9 @@ private:
 
 	void printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], stack<int> s); 
 	bool isValidNextEdge(int u, int v, vector<vector<int>> adjList); 
-	int DFSCount(int v, bool visited[], vector<vector<int>> adjList);
+	int DFSCount(int v, bool visited[], vector<vector<int>> adjLisit);
 
 	void setVisited(int v); 
 	bool isVisited(int v);  
 
- };
+};
