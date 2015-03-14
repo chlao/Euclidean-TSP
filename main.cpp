@@ -76,7 +76,7 @@ int main() {
 
 	W = 100; 
 	H = 100; 
-	N = 10; 
+	N = 50; 
 
 
 	cout<<"W: "<<W<<" H: "<<H<<" N:"<<N<<endl;
@@ -97,7 +97,7 @@ int main() {
 	//mst.makeTSP2(); 
 
 	//Deliverable C: Find TSP1.5 path from the constructed MST
-	mst.makeTSP1_5(); 
+	float cost = mst.makeTSP1_5(); 
 /*
 	//Find the perfect minimum-weight matching 
 	struct PerfectMatching::Options options;

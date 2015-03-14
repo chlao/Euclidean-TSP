@@ -1,6 +1,6 @@
 #include "common.h"
 #include "Minmatching/PerfectMatching.h" 
-
+#include <vector>
 #pragma once
 
 class MST {
@@ -10,7 +10,7 @@ public:
 	int* key; //Key values used to pick minimum weight edge in cut
 	bool* mstSet; //To represent set of vertices not yet included in MST
 	int N; //the size of pointset
-	vector<vector<int>> TSP15;  
+	//vector<vector<int>> TSP15;  
 
 	MST(float** adjacentMatrix, int size);
 	~MST();
@@ -20,11 +20,11 @@ public:
 	void printMST();
 
 	//deliverable b
-	void makeTSP2();
+	float makeTSP2();
 	stack<int> explore(int v, stack<int>); 
 
 	//deliverable c
-	void makeTSP1_5();
+	float makeTSP1_5();
 	
 	float calMean(int option);
 	float calStd(int option);

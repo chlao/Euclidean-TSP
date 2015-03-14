@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstring>
 
+
 MST::MST(float** input, int size) {
 	adjacentMatrix = input;
 	key = new int[size];   
@@ -15,7 +16,9 @@ MST::MST(float** input, int size) {
 }
 
 MST::~MST() {
-
+	delete [] key; 
+	delete [] mstSet; 
+	delete [] parent; 
 }
 
 //use Prim's algorithm or Kruskal algorithm. Copied from 'http://www.geeksforgeeks.org/greedy-algorithms-set-5-prims-minimum-spanning-tree-mst-2/'
@@ -112,7 +115,7 @@ float MST::calStd(int option) {
 	return std;
 }
 
-void MST::makeTSP2() {
+float MST::makeTSP2() {
 	//make a Eulerian tour by DFS
 	std::stack<int> s; 
 
@@ -134,7 +137,7 @@ void MST::makeTSP2() {
 
  	printMST(); 
 
-	int cost = 0; 
+	float cost = 0; 
 
 	//calculate heuristic TSP cost
 	for (int l = 0; l < N; l++){
@@ -142,6 +145,8 @@ void MST::makeTSP2() {
         }
 
 	std::cout << "TSP2 Cost " << cost << endl;  
+
+	return cost; 
 }
 
 stack<int> MST::explore(int v, stack<int> s){
@@ -172,7 +177,7 @@ stack<int> MST::explore(int v, stack<int> s){
   return s; 
 }
 
-void MST::makeTSP1_5() {
+float MST::makeTSP1_5() {
 	
 	//construct minimum-weight-matching for the given MST
 	minimumMatching();
@@ -181,8 +186,16 @@ void MST::makeTSP1_5() {
 	//combine();
 
 	//calculate heuristic TSP cost
-	
+	int cost; 	
+
+//	cout << "TSP1.5" << endl; 
+	for (int i = 0; i < N; i++){
+//std::cout << parent[i] << " - " << i <<endl;
+	   cost+= adjacentMatrix[i][parent[i]];
+        }
+cout << "TSP1.5 Cost: " << cost << endl; 	
 	//Fleury's Algorithm 
+	return cost; 
 }
 
 // Print Euler tour tour starting from vertex u 
@@ -217,7 +230,8 @@ void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], sta
       }
 
       if (s.empty() == false){
-	cout << v << " --- " << s.top() << endl; 
+	//cout << s.top() << " --- " << v << endl; 
+	parent[s.top()] = v; 
 	s.pop(); 
 
         adjList[u][i] = -1; // Remove u-v edge 
@@ -236,7 +250,8 @@ void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], sta
 	continue; 
       }
 
-      cout << u << " - " << v << endl;
+      //cout << u << " - " << v << endl;
+      parent[u] = v; 
       
       adjList[u][i] = -1; // Remove u-v edge 
 
@@ -360,7 +375,6 @@ void MST::minimumMatching() { //if you choose O(n^2)
 	//you should carefully choose a matching algorithm to optimize the TSP cost.
 	struct PerfectMatching::Options options; 
 	int i, e, node_num = numOdd, edge_num = numOdd*(numOdd-1)/2; 
-std::cout << "node_num: " << node_num << endl; 
 	int* edges; 
 	int* weights; 
 	PerfectMatching *pm = new PerfectMatching(node_num, edge_num); 
@@ -380,7 +394,11 @@ std::cout << "node_num: " << node_num << endl;
 
 	printf("Total cost of the perfect min-weight matching = %.1f\n", cost);  
 
-	combine(oddDegree, pm, node_num);  
+	combine(oddDegree, pm, node_num); 
+
+	delete pm; 
+	delete [] edges; 
+	delete [] weights;  
 }
 
 void MST::LoadInput(int& node_num, int& edge_num, int*& edges, int*& weights, vector<int> oddDegree, int N){
@@ -438,17 +456,6 @@ void MST::combine(std::vector<int> oddDegree, PerfectMatching* pm, int node_num)
  
 	std::cout << "Printing Eulerian circuit" << endl; 
 
-/*
-std::cout << "Adjacent List size: " << adjList.size() << endl; 
-
-	// Print out to see if it is accurate
-	for (int i = 0; i < N; i++){
-	  for (int j = 0; j < adjList[i].size(); j++){
-	    //cout << "Number of vertices" << adjList[i].size(); 
-	    cout << i << " - " << adjList[i][j] << endl; 
-	  }
-	} 
-*/
 	bool visited[N]; 
  	memset(visited, false, N);
 
@@ -457,5 +464,4 @@ std::cout << "Adjacent List size: " << adjList.size() << endl;
 	stack<int> s; 
 
 	printEulerUtil(0, adjList, visited, s); 
-
 }
