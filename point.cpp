@@ -5,7 +5,10 @@ Point::Point() {
 }
 
 Point::~Point() {
-
+  for (int i = 0; i < pointNum; i++){
+    free(adjacentMatrix[i]); 
+  }
+  free(adjacentMatrix); 
 }
 
 void Point::generatePoint(unsigned int H, unsigned int W, unsigned int N) {

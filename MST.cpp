@@ -135,8 +135,6 @@ float MST::makeTSP2() {
 	  s.pop(); 
 	}
 
- 	printMST(); 
-
 	float cost = 0; 
 
 	//calculate heuristic TSP cost
@@ -182,19 +180,14 @@ float MST::makeTSP1_5() {
 	//construct minimum-weight-matching for the given MST
 	minimumMatching();
 
-	//make all edges has even degree by combining mimimum-weight matching and MST
-	//combine();
-
 	//calculate heuristic TSP cost
-	int cost; 	
+	int cost = 0; 	
 
-//	cout << "TSP1.5" << endl; 
 	for (int i = 0; i < N; i++){
-//std::cout << parent[i] << " - " << i <<endl;
 	   cost+= adjacentMatrix[i][parent[i]];
         }
-cout << "TSP1.5 Cost: " << cost << endl; 	
-	//Fleury's Algorithm 
+
+	cout << "TSP1.5 Cost: " << cost << endl; 	
 	return cost; 
 }
 
@@ -210,7 +203,7 @@ void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], sta
     if (v != -1 && isValidNextEdge(u,v, adjList) && 
 	visited[v] == false /*&& isVisited(v) == false*/){
 
-      if (isVisited(v) == true){
+      if (isVisited(v) == true && s.empty() == true){
 	s.push(u);
 
 	// remove edges
@@ -230,7 +223,6 @@ void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], sta
       }
 
       if (s.empty() == false){
-	//cout << s.top() << " --- " << v << endl; 
 	parent[s.top()] = v; 
 	s.pop(); 
 
@@ -250,7 +242,6 @@ void MST::printEulerUtil(int u, vector<vector<int>> adjList, bool visited[], sta
 	continue; 
       }
 
-      //cout << u << " - " << v << endl;
       parent[u] = v; 
       
       adjList[u][i] = -1; // Remove u-v edge 
@@ -283,6 +274,7 @@ bool MST::isVisited(int v)
 
 bool MST::isValidNextEdge(int u, int v, vector<vector<int>> adjList)
 {
+//cout << "isValidNextEdge" << endl; 
   // The edge u-v is valid in one of the following two cases: 
 
   // 1) If v is the only adjacent vertex of u 
@@ -338,6 +330,7 @@ bool MST::isValidNextEdge(int u, int v, vector<vector<int>> adjList)
 // A DFS based function to count reachable vertices from v
 int MST::DFSCount(int v, bool visited[], vector<vector<int>> adjList)
 {
+//cout << "DFSCount" << endl; 
   visited[v] = true; 
   int count = 1; 
 
@@ -394,6 +387,7 @@ void MST::minimumMatching() { //if you choose O(n^2)
 
 	printf("Total cost of the perfect min-weight matching = %.1f\n", cost);  
 
+	//make all edges has even degree by combining mimimum-weight matching and MST
 	combine(oddDegree, pm, node_num); 
 
 	delete pm; 
@@ -461,7 +455,7 @@ void MST::combine(std::vector<int> oddDegree, PerfectMatching* pm, int node_num)
 
 	memset(mstSet, false, N);  
 
-	stack<int> s; 
+	stack<int> s; // Stack for backtracking 
 
 	printEulerUtil(0, adjList, visited, s); 
 }

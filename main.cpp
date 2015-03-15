@@ -60,23 +60,11 @@ int main() {
 	float** adjacentMatrix;
 	int W, H, N;
 	Point pointset;
-
-/*
-	W = 5000; 
-	H = 3000; 
-	N = 7000; 
-*/
-
-/*
 	W = 11390;
 	H = 11232;
 	N = 8586;
-*/
 
-
-	W = 100; 
-	H = 100; 
-	N = 50; 
+	//N = 1000; 
 
 
 	cout<<"W: "<<W<<" H: "<<H<<" N:"<<N<<endl;
@@ -90,39 +78,16 @@ int main() {
 	//Deliverable A: From pointset and adjacentMatrix, you should construct MST with Prim or Kruskal
 	MST mst(adjacentMatrix, N);
 	mst.makeTree();
-	mst.printMST();
+	//mst.printMST();
 
 	//Deliverable B: Find TSP2 path from the constructed MST
 	//You won't need any wrappers for B.
-	//mst.makeTSP2(); 
+
+  	mst.makeTSP2(); 
+
 
 	//Deliverable C: Find TSP1.5 path from the constructed MST
-	float cost = mst.makeTSP1_5(); 
-/*
-	//Find the perfect minimum-weight matching 
-	struct PerfectMatching::Options options;
-	int i, e, node_num = N, edge_num = N*(N-1)/2;
-	int* edges;
-	int* weights;
-	PerfectMatching *pm = new PerfectMatching(node_num, edge_num);
+	//mst.makeTSP1_5(); 
 
-	LoadInput(node_num, edge_num, edges, weights, adjacentMatrix, N);
-
-	for (e=0; e<edge_num; e++) {
-		pm->AddEdge(edges[2*e], edges[2*e+1], weights[e]);
-	}
-
-	pm->options = options;
-	pm->Solve();
-
-	double cost = ComputePerfectMatchingCost(node_num, edge_num, edges, weights, pm);
-	printf("Total cost of the perfect min-weight matching = %.1f\n", cost);
-	
-	PrintMatching(node_num, pm);
-
-	delete pm;
-	delete [] edges;
-	delete [] weights;
-*/	
 	return 0;
 }
